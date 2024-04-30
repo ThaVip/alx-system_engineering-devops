@@ -1,0 +1,11 @@
+#/!usr/bin/evn bash
+#server commands
+
+#setting up ssh agent
+eval $("ssh-agent")
+
+#path to identifier
+add -ssh ~/.ssh/id_rsa.pub
+
+#user name and ip address
+ssh ubuntu@100.27.0.239
