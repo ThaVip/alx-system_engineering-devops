@@ -1,0 +1,40 @@
+#!/usr/bin/evn bash
+
+# Check if the password argument is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <mysql_password>"
+    exit 1
+fi
+
+# Define MySQL credentials
+MYSQL_USER="root"
+MYSQL_PASSWORD="$1"
+
+# Define backup file name
+BACKUP_FILE="backup.sql"
+
+# Create MySQL dump
+echo "Creating MySQL dump..."
+mysqldump -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" --all-databases > "$BACKUP_FILE"
+
+# Check if mysqldump was successful
+if [ $? -ne 0 ]; then
+    echo "Failed to create MySQL dump. Exiting."
+    exit 1
+fi
+
+# Create archive file name with day-month-year format
+ARCHIVE_FILE="$(date +'%d-%m-%Y').tar.gz"
+
+# Compress backup file into tar.gz archive
+echo "Compressing backup file..."
+tar -czf "$ARCHIVE_FILE" "$BACKUP_FILE"
+
+# Check if compression was successful
+if [ $? -ne 0 ]; then
+    echo "Failed to compress backup file. Exiting."
+    exit 1
+fi
+
+echo "Backup completed successfully: $ARCHIVE_FILE"
+
